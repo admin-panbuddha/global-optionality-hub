@@ -1,0 +1,21 @@
+{
+  "name": "global-optionality-hub",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Global Optionality Hub — Investment research meets life-design optionality",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "db:migrate": "cd server && npx prisma migrate dev",
+    "db:push": "cd server && npx prisma db push",
+    "db:seed": "cd server && node prisma/seed.js",
+    "db:studio": "cd server && npx prisma studio",
+    "postinstall": "cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": ["investment", "optionality", "global", "dashboard"],
+  "author": "PanBuddha",
+  "license": "UNLICENSED"
+}

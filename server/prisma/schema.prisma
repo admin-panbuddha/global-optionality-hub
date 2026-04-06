@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── User Profile ──
+model UserProfile {
+  id                String   @id @default(cuid())
+  name              String?
+  email             String?  @unique
+  preferredRegions  String[] // e.g. ["East Asia", "Nordics"]
+  sectors           String[] // e.g. ["Energy", "Technology"]
+  investmentStyle   InvestmentStyle @default(BALANCED)
+  currencyHome      String   @default("CAD")
+  currencyTargets   String[] // e.g. ["JPY", "EUR", "SGD"]
+  riskTolerance     RiskTolerance @default(MODERATE)
+  retirementHorizon Int?     // years
+  residencyGoals    String[] // country codes
+  passportGoals     String[] // country codes
+  taxSensitivity    TaxSensitivity @default(MEDIUM)
+  lifestylePriorities String[] // ranked list
+  watchlist         WatchlistItem[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum InvestmentStyle {
+  DIVIDEND
+  GROWTH
+  VALUE
+  BALANCED
+}
+
+enum RiskTolerance {
+  CONSERVATIVE
+  MODERATE
+  AGGRESSIVE
+}
+
+enum TaxSensitivity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// ── Country ──
+model Country {
+  id                String   @id @default(cuid())
+  code              String   @unique // ISO 3166-1 alpha-2
+  name              String
+  region            String
+  gdpGrowth         Float?
+  inflationRate     Float?
+  politicalStability Float?  // 0-100
+  taxBurden         Float?   // effective rate %
+  costOfLivingIndex Float?
+  healthcareIndex   Float?
+  safetyIndex       Float?
+  passportStrength  Int?     // Henley rank
+  hasResidencyProgram Boolean @default(false)
+  residencyDetails  String?  // JSON text for flexibility
+  hasCitizenshipProgram Boolean @default(false)
+  citizenshipDetails String?
+  bankingAccess     String?  // "easy", "moderate", "restricted"
+  primaryCurrency   String
+  equities          Equity[]
+  watchlistItems    WatchlistItem[]
+  themes            ThemeCountry[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// ── Equity ──
+model Equity {
+  id                String   @id @default(cuid())
+  ticker            String
+  exchange          String
+  name              String
+  sector            String
+  marketCapUsd      Float?
+  dividendYield     Float?
+  revenueGrowthPct  Float?
+  currencyDenom     String   // currency the stock trades in
+  revenueGeography  String?  // JSON: {"Japan": 40, "Global": 60}
+  esgScore          Float?
+  thesisSummary     String?
+  recentChange      String?  // what changed recently
+  countryId         String
+  country           Country  @relation(fields: [countryId], references: [id])
+  watchlistItems    WatchlistItem[]
+  themes            ThemeEquity[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([ticker, exchange])
+}
+
+// ── Currency ──
+model Currency {
+  id                String   @id @default(cuid())
+  code              String   @unique // e.g. "JPY"
+  name              String
+  centralBankRate   Float?
+  carryYield        Float?
+  volatility30d     Float?
+  policyDirection   String?  // "hawkish", "dovish", "neutral"
+  outlook           String?
+  riskScenario      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+// ── Theme ──
+model Theme {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  description       String?
+  status            String?  // "active", "emerging", "fading"
+  countries         ThemeCountry[]
+  equities          ThemeEquity[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model ThemeCountry {
+  themeId   String
+  theme     Theme   @relation(fields: [themeId], references: [id])
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+  relevance Float?  // 0-100
+
+  @@id([themeId, countryId])
+}
+
+model ThemeEquity {
+  themeId  String
+  theme    Theme  @relation(fields: [themeId], references: [id])
+  equityId String
+  equity   Equity @relation(fields: [equityId], references: [id])
+  relevance Float? // 0-100
+
+  @@id([themeId, equityId])
+}
+
+// ── Watchlist Item (composite scored) ──
+model WatchlistItem {
+  id                  String   @id @default(cuid())
+  profileId           String
+  profile             UserProfile @relation(fields: [profileId], references: [id])
+  equityId            String
+  equity              Equity   @relation(fields: [equityId], references: [id])
+  countryId           String
+  country             Country  @relation(fields: [countryId], references: [id])
+
+  // ── Scores (0-100) ──
+  scoreFinancial      Float?
+  scoreCurrency       Float?
+  scoreOptional       Float?   // life optionality
+  scoreMacro          Float?
+  scoreRisk           Float?
+  scoreComposite      Float?   // weighted total
+
+  thesisSummary       String?
+  recentSignal        String?
+  riskNarrative       String?
+  lifePlanningNote    String?
+  recencyBoost        Float?   @default(0)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([profileId, equityId])
+}
