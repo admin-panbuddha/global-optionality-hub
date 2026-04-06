@@ -17,9 +17,9 @@ export default function Dashboard() {
   const loading = cLoading || eLoading || tLoading;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Zone A — Top Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-2xl font-bold text-white">Dashboard</h2>
           <p className="text-sm text-gray-400 mt-1">
@@ -27,7 +27,7 @@ export default function Dashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-500 hidden sm:inline">
             Last scan: {new Date().toLocaleDateString()}
           </span>
           <button className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white text-sm font-medium rounded-lg hover:bg-teal-600 transition-colors">
@@ -38,7 +38,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard icon={Globe} label="Countries Tracked" value={countries?.length || 0} color="teal" />
         <StatCard icon={TrendingUp} label="Equities" value={equities?.length || 0} color="gold" />
         <StatCard icon={Activity} label="Active Themes" value={themes?.filter(t => t.status === "active").length || 0} color="teal" />
@@ -46,8 +46,8 @@ export default function Dashboard() {
       </div>
 
       {/* Zone B + C — Heatmap + Watchlist */}
-      <div className="grid grid-cols-5 gap-6">
-        <div className="col-span-3 bg-navy-700 rounded-xl p-5 border border-navy-500/30">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="lg:col-span-3 bg-navy-700 rounded-xl p-4 sm:p-5 border border-navy-500/30">
           <h3 className="text-sm font-semibold text-gray-300 mb-4">Country Heatmap</h3>
           {loading ? (
             <div className="h-64 flex items-center justify-center text-gray-500">Loading...</div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="col-span-2 bg-navy-700 rounded-xl p-5 border border-navy-500/30 max-h-[500px] overflow-y-auto">
+        <div className="lg:col-span-2 bg-navy-700 rounded-xl p-4 sm:p-5 border border-navy-500/30 max-h-[500px] overflow-y-auto">
           <h3 className="text-sm font-semibold text-gray-300 mb-4">Equity Watchlist</h3>
           {loading ? (
             <div className="h-64 flex items-center justify-center text-gray-500">Loading...</div>
@@ -96,8 +96,8 @@ export default function Dashboard() {
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
-            <div className="col-span-2 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2 space-y-4">
               <div>
                 <h4 className="text-xs font-semibold text-teal-400 uppercase tracking-wide mb-1">Thesis</h4>
                 <p className="text-sm text-gray-300">{selectedEquity.thesisSummary || "No thesis available yet."}</p>
@@ -106,7 +106,7 @@ export default function Dashboard() {
                 <h4 className="text-xs font-semibold text-gold-400 uppercase tracking-wide mb-1">Recent Change</h4>
                 <p className="text-sm text-gray-300">{selectedEquity.recentChange || "No recent updates."}</p>
               </div>
-              <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="grid grid-cols-3 gap-3 sm:gap-4 text-sm">
                 <div className="bg-navy-900/50 rounded-lg p-3">
                   <span className="text-gray-500 text-xs">Dividend Yield</span>
                   <p className="text-white font-semibold">{selectedEquity.dividendYield ? `${selectedEquity.dividendYield}%` : "—"}</p>

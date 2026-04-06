@@ -8,7 +8,7 @@ export default function Countries() {
   const [selected, setSelected] = useState(null);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white">Countries</h2>
         <p className="text-sm text-gray-400 mt-1">Investment climate, residency pathways, and lifestyle metrics</p>
@@ -17,7 +17,7 @@ export default function Countries() {
       {loading ? (
         <div className="text-gray-500">Loading countries...</div>
       ) : (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {(countries || []).map((c) => (
             <button
               key={c.id}
@@ -66,7 +66,7 @@ export default function Countries() {
         <div className="bg-navy-700 rounded-xl p-6 border border-teal-500/30 space-y-4">
           <h3 className="text-lg font-bold text-white">{selected.name} — Detail View</h3>
 
-          <div className="grid grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-sm">
             <div className="bg-navy-900/50 rounded-lg p-3">
               <span className="text-gray-500 text-xs">Healthcare</span>
               <p className="text-white font-semibold">{selected.healthcareIndex}/100</p>

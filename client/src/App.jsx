@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Countries from "./pages/Countries";
 import Equities from "./pages/Equities";
 import Themes from "./pages/Themes";
+import ItalyPassport from "./pages/ItalyPassport";
 import Profile from "./pages/Profile";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/countries" element={<Countries />} />
         <Route path="/equities" element={<Equities />} />
         <Route path="/themes" element={<Themes />} />
+        <Route path="/italy" element={<ItalyPassport />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>

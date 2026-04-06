@@ -12,7 +12,7 @@ export default function Themes() {
   const { data: themes, loading } = useApi(() => api.getThemes());
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white">Themes</h2>
         <p className="text-sm text-gray-400 mt-1">Global macro themes linking countries, equities, and opportunities</p>
@@ -35,7 +35,7 @@ export default function Themes() {
               </div>
               <p className="text-sm text-gray-400 mb-4">{theme.description}</p>
 
-              <div className="flex gap-6 text-xs">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-xs">
                 <div>
                   <span className="text-gray-500 uppercase tracking-wide">Countries</span>
                   <div className="flex gap-2 mt-1">

@@ -18,7 +18,7 @@ export default function Profile() {
   );
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white">Your Profile</h2>
         <p className="text-sm text-gray-400 mt-1">
@@ -37,7 +37,7 @@ export default function Profile() {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Field label="Investment Style" value={profile.investmentStyle} />
           <Field label="Risk Tolerance" value={profile.riskTolerance} />
           <Field label="Home Currency" value={profile.currencyHome} />
